@@ -12,22 +12,22 @@ var rowPad = '    ';
 var columnPad = '  ';
 var failedCount = 0;
 
-function logLine(rowAndCols, message) {
-  console.log(gutil.colors.gray(rowAndCols), gutil.colors.red(' error '), message);
+function logLine(rowAndCols, message, type) {
+  console.log(gutil.colors.gray(rowAndCols), type === 'error' ? gutil.colors.red(' error ') : gutil.colors.yellow(' warn '), message);
 }
 
 function reportFailures(lint) {
   if (!lint.lines) {
-    logLine(' '.repeat(rowPad.length + columnPad.length + 1), lint.message);
-    failedCount++;
+    logLine(' '.repeat(rowPad.length + columnPad.length + 1), lint.message, lint.type);
+    if (lint.type == 'error') failedCount++;
     return;
   }
 
   lint.lines.forEach(function (lineInfo) {
     var row = (rowPad + lineInfo.row).slice(-rowPad.length);
     var column = (lineInfo.column + columnPad).substring(0, columnPad.length);
-    logLine(row + ':' + column, lint.message);
-    failedCount++;
+    logLine(row + ':' + column, lint.message, lint.type);
+    if (lint.type == 'error') failedCount++;
   });
 }
 

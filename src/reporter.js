@@ -11,17 +11,17 @@ const rowPad = '    ';
 const columnPad = '  ';
 let failedCount = 0;
 
-function logLine(rowAndCols, message) {
+function logLine(rowAndCols, message, type) {
   console.log(
     gutil.colors.gray(rowAndCols),
-    gutil.colors.red(' error '),
+    type === 'error' ? gutil.colors.red(' error ') : gutil.colors.yellow(' warn '),
     message
   );
 }
 
 function reportFailures(lint) {
   if (!lint.lines) {
-    logLine(' '.repeat(rowPad.length + columnPad.length + 1), lint.message);
+    logLine(' '.repeat(rowPad.length + columnPad.length + 1), lint.message, lint.type);
     failedCount++;
     return;
   }
@@ -29,7 +29,7 @@ function reportFailures(lint) {
   lint.lines.forEach((lineInfo) => {
     let row = (rowPad + lineInfo.row).slice(-rowPad.length);
     let column = (lineInfo.column + columnPad).substring(0, columnPad.length);
-    logLine(`${row}:${column}`, lint.message);
+    logLine(`${row}:${column}`, lint.message, lint.type);
     failedCount++;
   });
 }

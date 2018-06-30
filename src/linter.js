@@ -66,12 +66,10 @@ function processRule(content, file, rule) {
 
   if (status.failed) {
     let lines = status.indexes ? findErrorLines(content, status.indexes) : null;
-
+    let message = status.message || rule.message;
+    let type = status.type || rule.type || 'error';
     file.customLint = file.customLint || [];
-    file.customLint.push({
-      message: rule.message,
-      lines: lines
-    });
+    file.customLint.push({message, lines, type});
   }
 }
 

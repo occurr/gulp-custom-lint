@@ -22,7 +22,7 @@ function logLine(rowAndCols, message, type) {
 function reportFailures(lint) {
   if (!lint.lines) {
     logLine(' '.repeat(rowPad.length + columnPad.length + 1), lint.message, lint.type);
-    failedCount++;
+    if (lint.type == 'error') failedCount++;
     return;
   }
 
@@ -30,7 +30,7 @@ function reportFailures(lint) {
     let row = (rowPad + lineInfo.row).slice(-rowPad.length);
     let column = (lineInfo.column + columnPad).substring(0, columnPad.length);
     logLine(`${row}:${column}`, lint.message, lint.type);
-    failedCount++;
+    if (lint.type == 'error') failedCount++;
   });
 }
 
